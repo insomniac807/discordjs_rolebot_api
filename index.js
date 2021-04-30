@@ -2,25 +2,40 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 require('dotenv').config();
 
-const add_role = (memberID, roleName) => {
+client.login(process.env.BOT_TOKEN);
+
+async function add_role(memberID, roleName) {
     let guild = client.guilds.cache.find(guild => guild.id === process.env.GUILD_ID);
-    let member = guild.members.cache.find(member => member.id === memberID);
-    let role = guild.roles.cache.find(role => role.name === roleName);
-    member.roles.add(role);
+    console.log(`Guild: ${guild}`);
+    await guild.members.fetch(memberID)
+    .then(member => { 
+        console.log(`Member: ${member}`);
+        let role = guild.roles.cache.find(role => role.name === roleName);
+        member.roles.add(role);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
 
-const remove_role = (memberID, roleName) => {
+async function remove_role(memberID, roleName) {
     let guild = client.guilds.cache.find(guild => guild.id === process.env.GUILD_ID);
-    let member = guild.members.cache.find(member => member.id === memberID);
-    let role = guild.roles.cache.find(role => role.name === roleName);
-    member.roles.remove(role);
+    console.log(`Guild: ${guild}`);
+    await guild.members.fetch(memberID)
+    .then(member => { 
+        console.log(`Member: ${member}`);
+        let role = guild.roles.cache.find(role => role.name === roleName);
+        member.roles.remove(role);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
 
 client.once('ready', () => {
-	console.log('Ping Pong Bot Loaded!');
+	console.log('Bot Loaded!');
 });
 
-client.login(process.env.BOT_TOKEN);
 
 const express = require('express');
 const bodyParser = require('body-parser');
